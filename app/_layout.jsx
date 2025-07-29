@@ -1,10 +1,16 @@
-import { Stack } from "expo-router";
+import { Stack, router } from 'expo-router';
+import { auth } from '@/FirebaseConfig';
+import { getAuth } from 'firebase/auth';
+import { TouchableOpacity, Text, Touchable } from 'react-native';
+
 
 const RootLayout = () => {
-  return <Stack 
-    screenOptions={{
+
+  
+  return (
+    <Stack screenOptions={{
       headerStyle: {
-        backgroundColor: '#ff8c00',
+        backgroundColor: '#ff8c00'
       },
       headerTintColor: '#ffffff',
       headerTintStyle: {
@@ -12,13 +18,11 @@ const RootLayout = () => {
         fontWeight: 'bold'
       },
       contentStyle: {
-        paddingHorizontal: 10,
-        paddingTop: 10,
         backgroundColor: '#ffffff'
       }
     }}>
-      <Stack.Screen name='index' options={{title:'Home'}}/>
-    </Stack>;
+    </Stack>
+  ) 
 }
 
 export default RootLayout;

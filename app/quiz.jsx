@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRouter } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 const QuizScreen = () => {
@@ -24,7 +24,7 @@ const QuizScreen = () => {
     console.log(correctAnswer)
   }
 
-  useEffect(() => {
+  const checkAnswer = () => {
     console.log(selectedAnswer)
     if(selectedAnswer == correctAnswer){
       console.log("You answered Correct!")
@@ -32,7 +32,7 @@ const QuizScreen = () => {
     else{
       console.log("Sorry, you were wrong!")
     }
-  }, [selectedAnswer]);
+  };
   
   
   const answerOptions = [
@@ -77,7 +77,7 @@ const QuizScreen = () => {
       }
       <Text>This is the question Page</Text>
       {selectedAnswer != null ?
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={checkAnswer}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>:null
       }

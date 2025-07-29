@@ -1,40 +1,92 @@
-import React, { useState, useEffect} from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
-import { useRouter } from 'expo-router'
+import { Text, TextInput, View, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native'
+import React, { useState} from 'react';
+import { auth } from '../FirebaseConfig';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from 'expo-router';
 
-const HomeScreen = () => {
-  const router = useRouter();
-  return (
-    <View style={styles.container}>
-        <Text>This is the Home Page</Text>
-        <TouchableOpacity style={styles.playButton} onPress={() => router.push('/quiz')}>
-          <Text style={styles.buttonText}>Play</Text>
-        </TouchableOpacity>
-    </View>
-  );
+const LoginScreen = () => {
+
+    const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const SignIn = async () => {
+        try{
+            const user = await signInWithEmailAndPassword(auth, email, password);
+            if(user) router.replace('/home'); 
+        } catch(error){
+            console.log(error)
+            alert('Sign in failed: ' + error.message);
+        }
+    }
+
+    const SignUp = async () => {
+        try{
+            const user = await createUserWithEmailAndPassword(auth, email, password); 
+            if(user) router.replace('/home');   
+        } catch(error){
+            console.log(error)
+            alert('Sign in failed: ' + error.message);
+        }
+    }
+
+    return(
+            <View>
+                <Text>Email</Text>
+                <TextInput style={styles.textInput} placeholder="jondoe@email.com" onChangeText={setEmail}></TextInput>
+                <Text>Password</Text>
+                <TextInput style={styles.textInput} placeholder="password" onChangeText={setPassword}></TextInput>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.signInButton} onPress={SignIn}>
+                        <Text style={{color:'#ffffff', fontSize: 18}}>Sign In</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.signUpButton} onPress={SignUp}>
+                        <Text style={{color:'#ffffff', fontSize: 18}}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+    )
+
+
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  playButton: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-    backgroundColor: '#aaaaaa',
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  signInButton: {
+    backgroundColor: '#42a147',
+    color: '#ffffff',
     padding: 10,
     borderRadius: 8,
-    alignItems: 'center'
+    alignItems: 'center',
+    minWidth: 100,
+    margin: 5
   },
-  buttonText: {
+  signUpButton: {
+    backgroundColor: '#3268bf',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    minWidth: 100,
+    margin: 5
+  },
+  signInText: {
     color: '#ffffff',
-    fontSize: 18,
+    fontSize: 30,
     fontWeight:'bold'
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor:'#000000',
+    borderRadius: 3,
+    padding: 5,
+    fontSize: 20,
+    marginBottom: 5
   }
 })
-
-
-
-export default HomeScreen;
+export default LoginScreen;
